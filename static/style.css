@@ -1,9 +1,34 @@
-#canvas {
-    border: 5px solid black;
-    width: 500px;
-    height: 500px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Credit Text */
+body>div:first-of-type {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #00ffcc;
+  text-shadow: 0 0 10px #00ffcc;
+}
+
+/* Canvas Styling */
+canvas {
+  border: 2px solid #00ffcc;
+  box-shadow: 0 0 15px #00ffcc;
+  border-radius: 8px;
+  background-color: #111;
+}
+
+/* Hide the preloaded images but keep them accessible */
+div[style*="display: none"] {
+  display: none;
 }
