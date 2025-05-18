@@ -10,6 +10,7 @@ let createRect = (x, y, width, height, color) => {
   canvasContext.fillRect(x, y, width, height);
 };
 
+let gameSpeed = 15;
 let fps = 30;
 let oneBlockSize = 20;
 let wallSpaceWidth = oneBlockSize / 1.5;
@@ -22,6 +23,7 @@ let ghosts = [];
 let ghostCount = 4;
 let lives = 3;
 let foodCount = 0;
+let gameInterval;
 
 //static variable
 const DIRECTION_RIGHT = 4;
@@ -83,13 +85,23 @@ let randomTargetForGhosts = [
 
 // update and snapshot
 let gameLoop = () => {
-  draw()
-  update();
+  setInterval(update, 1000 / gameSpeed);
+  setInterval(draw, 1000 / fps);
 };
 
 
 // game modification
 let update = () => {
+  if (score >= foodCount) {
+    //clearInterval(gameIntervel);
+    //drawWin();
+    return;
+  }
+  if (lives == 0) {
+    //drawGameOver();
+    return;
+  }
+
   pacman.moveProcess();
   pacman.eat();
   for (let i = 0; i < ghostCount; i++) {
@@ -98,10 +110,6 @@ let update = () => {
   if (pacman.checkGhostCollision()) {
     restartGame();
   }
-  if (score >= foodCount) {
-    clearInterval(gameIntervel);
-    drawWin();
-  }
 };
 
 // reload each time collided
@@ -109,15 +117,6 @@ let restartGame = () => {
   createNewPacMan();
   createGhosts();
   lives--;
-  if (lives == 0) {
-    gameOver();
-  }
-}
-
-// inform GAMEOVER and request to start over
-let gameOver = () => {
-  clearInterval(gameIntervel);
-  drawGameOver();
 }
 
 
@@ -130,6 +129,8 @@ let draw = () => {
   drawScore();
   drawGhosts();
   drawLives();
+  if (lives == 0) drawGameOver();
+  if (score >= foodCount) drawWin();
 };
 
 
@@ -238,17 +239,15 @@ let drawLives = () => {
 let drawWin = () => {
   canvasContext.font = "bold 20px 'VT323'"
   canvasContext.fillStyle = "white";
-  canvasContext.fillText("WINNING !", 150, 230);
+  canvasContext.fillText("WINNING!", canvas.width / 2 - canvasContext.measureText("WINNING!").width / 2, canvas.height / 2);
 }
 
 let drawGameOver = () => {
   canvasContext.font = "bold 20px 'VT323'"
   canvasContext.fillStyle = "white";
-  canvasContext.fillText("GAME OVER !", 150, 230);
+  canvasContext.fillText("GAME OVER!", canvas.width / 2 - canvasContext.measureText("WINNING!").width / 2, canvas.height / 2);
 }
 
-
-let gameIntervel = setInterval(gameLoop, 1000 / fps);
 
 
 let createNewPacMan = () => {
@@ -282,7 +281,7 @@ let createGhosts = () => {
 
 createNewPacMan();
 createGhosts();
-//gameLoop();
+gameLoop();
 
 window.addEventListener("keydown", (event) => {
   let k = event.keyCode;
